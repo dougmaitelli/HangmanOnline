@@ -1,9 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package JF;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -12,24 +6,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author dougmaitelli
- */
-public class JF {
+public class HangmanOnline {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) throws Exception {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 
         int option = 0;
         do {
-            System.out.println("Escolha uma opcao:");
-            System.out.println("1 - Server:");
-            System.out.println("2 - Cliente:");
+            System.out.println("Choose an Option:");
+            System.out.println("1 - Server");
+            System.out.println("2 - Client");
 
             Character opt;
             do {
@@ -46,17 +33,17 @@ public class JF {
             BufferedReader ci = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
             PrintStream co = new PrintStream(cliente.getOutputStream());
 
-            int vidas = 5;
+            int lifes = 5;
 
-            System.out.print("Digite uma palavra: ");
+            System.out.print("Choose a word: ");
 
-            String palavra;
+            String word;
             do {
-                palavra = br.readLine();
-            } while (palavra.isEmpty());
+            	word = br.readLine();
+            } while (word.isEmpty());
 
             List<Character> array = new ArrayList<Character>();
-            for (int i = 0; i < palavra.length(); i++) {
+            for (int i = 0; i < word.length(); i++) {
                 array.add('_');
             }
 
@@ -65,27 +52,27 @@ public class JF {
                     co.print(c);
                 }
 
-                co.println("     Vidas: " + vidas);
+                co.println("     Life: " + lifes);
 
-                Character letra;
+                Character letter;
                 do {
-                    letra = (char) Character.toLowerCase(ci.read());
-                } while (!Character.isLetter(letra));
+                	letter = (char) Character.toLowerCase(ci.read());
+                } while (!Character.isLetter(letter));
 
-                if (palavra.toLowerCase().contains(letra.toString())) {
-                    for (int i = 0; i < palavra.length(); i++) {
-                        if (Character.toLowerCase(palavra.charAt(i)) == letra) {
-                            array.set(i, palavra.charAt(i));
+                if (word.toLowerCase().contains(letter.toString())) {
+                    for (int i = 0; i < word.length(); i++) {
+                        if (Character.toLowerCase(word.charAt(i)) == letter) {
+                            array.set(i, word.charAt(i));
                         }
                     }
                 } else {
-                    vidas--;
+                    lifes--;
                 }
-            } while (array.indexOf('_') >= 0 && vidas > 0);
+            } while (array.indexOf('_') >= 0 && lifes > 0);
 
             co.println("close");
         } else if (option == 2) {
-            System.out.println("Digite o ip: ");
+            System.out.println("Enter the IP: ");
 
             String ip;
             do {
@@ -97,22 +84,22 @@ public class JF {
             PrintStream co = new PrintStream(server.getOutputStream());
 
             do {
-                String texto = ci.readLine();
+                String text = ci.readLine();
 
-                if (texto.equals("close")) {
+                if (text.equals("close")) {
                     break;
                 }
                 
-                System.out.println(texto);
+                System.out.println(text);
                 
-                System.out.print("Escolha uma letra: ");
+                System.out.print("Choose a letter: ");
 
-                Character letra;
+                Character letter;
                 do {
-                    letra = (char) br.read();
-                } while (!Character.isLetter(letra));
+                	letter = (char) br.read();
+                } while (!Character.isLetter(letter));
 
-                co.println(letra);
+                co.println(letter);
             } while (true);
         }
     }
